@@ -1,0 +1,31 @@
+
+
+
+src 
+    main
+        java
+          ru
+            k0r0tk0ff
+                xml
+                     processor
+                         Main.java
+						 domain
+						     Entry.java
+						 service
+						     EntryValidator.java
+						     XmlParser.java
+							   XmlCreator.java
+						 infrastructure	 
+						    	io
+							       utils
+								        XmlFileReader.java
+								        XmlFileWriter.java
+					   	  	store
+							       db
+								        DbProcessor.java	 
+                                	ConnectionHolder.java
+					 
+    	resources
+            app.properties		
+			
+			
