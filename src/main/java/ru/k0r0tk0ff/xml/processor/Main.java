@@ -4,8 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.k0r0tk0ff.xml.processor.dao.DbDao;
 import ru.k0r0tk0ff.xml.processor.infrastructure.io.utils.AppPropertiesHolder;
-import ru.k0r0tk0ff.xml.processor.service.XmlParser;
+import ru.k0r0tk0ff.xml.processor.infrastructure.store.db.ConnectionHolder;
 
 import java.io.IOException;
 
@@ -20,12 +21,9 @@ public class Main {
         initializeLoggerSystem();
         Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-        LOGGER.debug("debug");
-        LOGGER.info("info");
-        LOGGER.warn("warning");
-
-        XmlParser xmlParser = new XmlParser();
-        xmlParser.testLog();
+        DbDao dbDao = new DbDao();
+        dbDao.createDb();
+        ConnectionHolder.getInstance().closeConnection();
 
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("System property xmlProcessorLogFileName = " + System.getProperty("xml.processor.log.filename"));
@@ -46,7 +44,7 @@ public class Main {
         try {
             AppPropertiesHolder.getInstance().loadPropertiesFromFile();
         } catch (IOException e) {
-            System.out.println("Cannot load property file \"" + AppPropertiesHolder.getPropertiesFileName() + "\"");
+            System.out.println("Cannot load property file \"" + AppPropertiesHolder.PROPERTIES_FILE_NAME + "\"");
         }
     }
 }
