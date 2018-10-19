@@ -3,7 +3,7 @@ package ru.k0r0tk0ff.xml.processor.domain;
 /**
  * Created by korotkov_a_a on 18.10.2018.
  */
-public class Entry {
+public class RawEntry {
     private String depCode;
     private String depJob;
     private String description;
