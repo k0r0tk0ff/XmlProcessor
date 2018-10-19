@@ -14,18 +14,10 @@ import java.io.IOException;
  */
 
 public class Main {
+    private final static String LOG_FILE_NAME_KEY = "xml.processor.log.filename";
+
     public static void main(String[] args) {
-        String logFilename;
-
-        try {
-            AppPropertiesHolder.getInstance().loadPropertiesFromFile();
-        } catch (IOException e) {
-            System.out.println("Cannot load property file \"" + AppPropertiesHolder.getPropertiesFileName() + "\"");
-        }
-
-        logFilename = AppPropertiesHolder.getInstance().getLogFilename();
-
-        initializeLoggerSystem(logFilename);
+        initializeLoggerSystem();
         Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
         LOGGER.debug("debug");
@@ -36,14 +28,25 @@ public class Main {
         xmlParser.testLog();
 
         if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("System property xmlProcessorLogFileName = " + System.getProperty("xmlProcessorLogFileName"));
+            LOGGER.debug("System property xmlProcessorLogFileName = " + System.getProperty("xml.processor.log.filename"));
         }
     }
 
-    private static void initializeLoggerSystem(String fileName) {
-        System.setProperty("xmlProcessorLogFileName", fileName);
+    private static void initializeLoggerSystem() {
+        String logFileName;
+        loadPropertiesFromFile();
+        logFileName = AppPropertiesHolder.getInstance().getLogFilename(LOG_FILE_NAME_KEY);
+        System.setProperty(LOG_FILE_NAME_KEY, logFileName);
         LoggerContext ctx =
                 (LoggerContext) LogManager.getContext(false);
         ctx.reconfigure();
+    }
+
+    private static void loadPropertiesFromFile() {
+        try {
+            AppPropertiesHolder.getInstance().loadPropertiesFromFile();
+        } catch (IOException e) {
+            System.out.println("Cannot load property file \"" + AppPropertiesHolder.getPropertiesFileName() + "\"");
+        }
     }
 }
