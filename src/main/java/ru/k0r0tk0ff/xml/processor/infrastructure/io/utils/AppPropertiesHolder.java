@@ -13,21 +13,19 @@ import java.util.Properties;
  */
 
 public class AppPropertiesHolder {
-    private final static String PROPERTIES_FILE_NAME = "app.properties";
-    private static volatile AppPropertiesHolder instance;
+    public final static String PROPERTIES_FILE_NAME = "app.properties";
+
+    private static AppPropertiesHolder instance;
     private static Properties properties;
 
+    private AppPropertiesHolder(){
+    }
+
     public static AppPropertiesHolder getInstance() {
-        AppPropertiesHolder localInstance = instance;
-        if (localInstance == null) {
-            synchronized (AppPropertiesHolder.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new AppPropertiesHolder();
-                }
-            }
+        if (instance == null) {
+            instance = new AppPropertiesHolder();
         }
-        return localInstance;
+        return instance;
     }
 
     public void loadPropertiesFromFile() throws IOException {
@@ -38,15 +36,11 @@ public class AppPropertiesHolder {
         input.close();
     }
 
-    public String getLogFilename() {
-        return properties.getProperty("xmlProcessorLogFileName");
+    public String getLogFilename(String logFileNamePropertyKey) {
+        return properties.getProperty(logFileNamePropertyKey);
     }
 
-    public static Properties getProperties(){
+    public Properties getProperties(){
         return properties;
-    }
-
-    public static String getPropertiesFileName() {
-        return PROPERTIES_FILE_NAME;
     }
 }
