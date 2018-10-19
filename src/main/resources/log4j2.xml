@@ -6,7 +6,7 @@
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n</Pattern>
             </PatternLayout>
         </Console>
-        <RollingFile name="RollingFile" fileName="${sys:xmlProcessorLogFileName}"
+        <RollingFile name="RollingFile" fileName="${sys:xml.processor.log.filename}"
                      filePattern="$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} %-5p %c{1} - %m%n</Pattern>
