@@ -14,17 +14,19 @@ public class InputParametersChecker {
 
     private final static String[] validInputParamForFirstParam = new String[] {"-S","-G", "-C"};
 
-    public static void ParametersCheck(String firstParameter, String secondParameter){
+    public static void ParametersCheck(String[] args){
 
-        if(!isParameterCorrect(firstParameter)) {
+        if(!isParameterCorrect(args[0])) {
             System.out.println("First parameter incorrect! See readme.txt");
             System.exit(1);
         }
 
-        if(!firstParameter.equals("-C")){
-            if(!isFilenameCorrect(secondParameter)){
-                System.out.println("Second parameter incorrect! Use digital, alphabetical symbols and point for file name.");
-                System.exit(1);
+        if (args.length == 2) {
+            if (!args[0].equals("-C")) {
+                if (!isFilenameCorrect(args[1])) {
+                    System.out.println("Second parameter incorrect! Use digital, alphabetical symbols and point for file name.");
+                    System.exit(1);
+                }
             }
         }
     }
