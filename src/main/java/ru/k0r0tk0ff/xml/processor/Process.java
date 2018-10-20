@@ -58,7 +58,13 @@ public class Process {
         dbDao.createDb();
     }
 
-    public void runMainRoute(String parameter, String fileName) throws XmlParserException {
+    public void runMainRoute(String[] args) throws XmlParserException {
+        String parameter = args[0];
+        String fileName = "";
+        if(args.length == 2) {
+            fileName = args[1];
+        }
+
         switch (parameter) {
             case "-G": getDataFromDbAndWriteToFile(fileName); break;
             case "-C": clearDataInDb(); break;
