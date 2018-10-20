@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class InputParametersChecker {
 
-    private final static String[] validInputParamForFirstParam = new String[] {"-L","-U","-G", "-C"};
+    private final static String[] validInputParamForFirstParam = new String[] {"-S","-G", "-C"};
 
     public static void ParametersCheck(String firstParameter, String secondParameter){
 
