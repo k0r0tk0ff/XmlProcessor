@@ -5,6 +5,19 @@
 файл с настройками приложения "app.properties", и по желанию скрипт запуска
 приложения "run.bat".
 
+    Перед запуском, по необходимости, можно указать уровень логирования 
+в файле настроек приложения "app.properties". 
+    Допустимые значения:
+TRACE
+DEBUG
+INFO
+WARN
+ERROR
+FATAL
+OFF
+По умолчанию выставлен уровень "INFO".
+(См. https://logging.apache.org/log4j/2.0/manual/architecture.html)    
+
     Запускать приложение можно как скриптом запуска -
 run.bat [options] <fileName>
 
@@ -27,3 +40,5 @@ java -jar XmlProcessor-2.5-jar-with-dependencies.jar [options] <fileName>
 run.bat -S dataCollection.xml     - синхронизировать данные в бд с данными из файла
 run.bat -G dataFromDb.xml         - выгрузить данные из бд в файл dataFromDb.xml
 run.bat -C                        - очистить данные в бд
+
+
