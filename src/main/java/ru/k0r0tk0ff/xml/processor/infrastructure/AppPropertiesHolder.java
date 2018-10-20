@@ -1,4 +1,4 @@
-package ru.k0r0tk0ff.xml.processor.infrastructure.io.utils;
+package ru.k0r0tk0ff.xml.processor.infrastructure;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,5 +42,9 @@ public class AppPropertiesHolder {
 
     public Properties getProperties(){
         return properties;
+    }
+
+    public String getLogLevel(String logLevelKey) {
+        return properties.getProperty(logLevelKey);
     }
 }
