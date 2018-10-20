@@ -5,23 +5,14 @@ package ru.k0r0tk0ff.xml.processor.dao;
  */
 
 import com.sun.rowset.CachedRowSetImpl;
-import com.sun.rowset.WebRowSetImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.k0r0tk0ff.xml.processor.domain.RawEntry;
 import ru.k0r0tk0ff.xml.processor.infrastructure.store.db.ConnectionHolder;
 
 import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.WebRowSet;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.sql.*;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class DbDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(DbDao.class);
@@ -48,9 +39,7 @@ public class DbDao {
         try (Statement statement = ConnectionHolder.getInstance().getConnection().createStatement()) {
             String clearTableInDb = "TRUNCATE TABLE DATA";
             statement.execute(clearTableInDb);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Truncate table success");
-            }
+            LOGGER.info("Clear data success");
             statement.close();
         } catch (SQLException e) {
             LOGGER.error("Cannot clear data in db!", e);
@@ -75,48 +64,94 @@ public class DbDao {
         return cachedRowSet;
     }
 
-/*    private void doInsertDataToDb(HashSet<RawEntry> hashSet) {
-        DataCreatorForXmlFile dataCreator = new DataCreatorForXmlFile();
-
-        final String queryForPutData = "INSERT into ARTICLE (NAME, CODE, GUID, USERNAME) VALUES (?,?,?,?)";
+    public void deleteMissingEntriesInDb(Set<RawEntry> entriesForDeleteInDb) {
+        final String queryForDeleteData = "DELETE FROM DATA WHERE DEPCODE = ? AND DEPJOB = ?";
+        int i = 0;
         try (PreparedStatement preparedStatement =
-                     dbStorage.getConnection().prepareStatement(queryForPutData)) {
-            for (int i = 1; i < maxCountOfRawEntry + 1; i++) {
-                preparedStatement.setString(1, dataForInsertToDb.get(i).getName());
-                preparedStatement.setInt(2, dataForInsertToDb.get(i).getCode());
-                preparedStatement.setString(3, dataForInsertToDb.get(i).getGuid());
-                preparedStatement.setString(4, dataForInsertToDb.get(i).getUserName());
+                     ConnectionHolder.getInstance().getConnection().prepareStatement(queryForDeleteData)) {
+            ConnectionHolder.getInstance().getConnection().setAutoCommit(false);
+            for (RawEntry entry : entriesForDeleteInDb) {
+                preparedStatement.setString(1, entry.getDepCode());
+                preparedStatement.setString(2, entry.getDepJob());
                 preparedStatement.addBatch();
+                i++;
                 if (i % 5000 == 0) {
                     preparedStatement.executeBatch();
                 }
             }
             preparedStatement.executeBatch();
-            LOGGER.debug("Insert data success");
+            ConnectionHolder.getInstance().getConnection().commit();
+            ConnectionHolder.getInstance().getConnection().setAutoCommit(true);
+            LOGGER.debug(" Delete data success. Total delete rows: " + i);
         } catch (SQLException e) {
+            try {
+                ConnectionHolder.getInstance().getConnection().rollback();
+            } catch (SQLException e1) {
+                LOGGER.error("Cannot rollback !", e1);
+            }
+            LOGGER.error("Cannot delete data in DB !", e);
+        }
+    }
+
+    public void insertEntriesToDb(Set<RawEntry> entriesForInserToDb) {
+        final String queryForInsertData = "INSERT INTO DATA (DEPCODE, DEPJOB, DESCRIPTION) values (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement =
+                     ConnectionHolder.getInstance().getConnection().prepareStatement(queryForInsertData)) {
+            ConnectionHolder.getInstance().getConnection().setAutoCommit(false);
+            int i = 0;
+            for (RawEntry entry : entriesForInserToDb) {
+                preparedStatement.setString(1, entry.getDepCode());
+                preparedStatement.setString(2, entry.getDepJob());
+                preparedStatement.setString(3, entry.getDescription());
+                preparedStatement.addBatch();
+                i++;
+                if (i % 5000 == 0) {
+                    preparedStatement.executeBatch();
+                }
+            }
+            preparedStatement.executeBatch();
+            ConnectionHolder.getInstance().getConnection().commit();
+            ConnectionHolder.getInstance().getConnection().setAutoCommit(true);
+            LOGGER.debug(" Insert data success. Total insert rows: " + i);
+        } catch (SQLException e) {
+            try {
+                ConnectionHolder.getInstance().getConnection().rollback();
+            } catch (SQLException e1) {
+                LOGGER.error("Cannot rollback !", e1);
+            }
             LOGGER.error("Cannot insert data to DB !", e);
         }
     }
 
-    public HashSet<Entry> getDataFromDb() {
-        HashSet<Entry> data = new ArrayList<>();
-        String sqlQueryForGetData = "SELECT ID_ART, NAME, CODE, GUID, USERNAME FROM ARTICLE";
-        try (Statement statement =
-                     dbStorage.getConnection().createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(sqlQueryForGetData)) {
-                while (resultSet.next()) {
-                    RawEntry rawEntry = new RawEntry();
-                    rawEntry.setName(resultSet.getString("NAME"));
-                    rawEntry.setId_art(resultSet.getInt("ID_ART"));
-                    rawEntry.setCode(resultSet.getInt("CODE"));
-                    rawEntry.setGuid(resultSet.getString("GUID"));
-                    rawEntry.setUserName(resultSet.getString("USERNAME"));
-                    data.add(rawEntry);
+    public void updateEntriesInDb(Set<RawEntry> entriesForUpdateInDb) {
+        final String queryForInsertData = "UPDATE DATA SET DESCRIPTION = ? WHERE DEPCODE = ? AND DEPJOB = ?";
+
+        try (PreparedStatement preparedStatement =
+                     ConnectionHolder.getInstance().getConnection().prepareStatement(queryForInsertData)) {
+            ConnectionHolder.getInstance().getConnection().setAutoCommit(false);
+            int i = 0;
+            for (RawEntry entry : entriesForUpdateInDb) {
+                preparedStatement.setString(1, entry.getDescription());
+                preparedStatement.setString(2, entry.getDepCode());
+                preparedStatement.setString(3, entry.getDepJob());
+                preparedStatement.addBatch();
+                i++;
+                if (i % 5000 == 0) {
+                    preparedStatement.executeBatch();
                 }
             }
+            preparedStatement.executeBatch();
+            ConnectionHolder.getInstance().getConnection().commit();
+            ConnectionHolder.getInstance().getConnection().setAutoCommit(true);
+            LOGGER.debug(" Update data success. Total update rows: " + i);
         } catch (SQLException e) {
-            throw new StorageException("Cannot get data from DB !", e);
+            try {
+                ConnectionHolder.getInstance().getConnection().rollback();
+            } catch (SQLException e1) {
+                LOGGER.error("Cannot rollback !", e1);
+            }
+            LOGGER.error("Cannot update data in DB !", e);
         }
-        return data;
-    }*/
+    }
 }
