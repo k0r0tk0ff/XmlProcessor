@@ -19,9 +19,9 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="Console" level="debug"/>
-            <AppenderRef ref="RollingFile" level="info"/>
+            <Root level="${sys:xml.processor.log.level}">
+            <AppenderRef ref="Console" level="warn"/>
+            <AppenderRef ref="RollingFile" level="debug"/>
         </Root>
     </Loggers>
 </Configuration>
