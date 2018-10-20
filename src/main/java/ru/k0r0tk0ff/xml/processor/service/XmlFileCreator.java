@@ -30,7 +30,6 @@ public class XmlFileCreator {
 
     public void convertDataToXmlAndSave() throws XMLStreamException, FileNotFoundException, TransformerException {
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        //XMLStreamWriter writer = factory.createXMLStreamWriter(new FileWriter(tmpFileName));
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         XMLStreamWriter writer = factory.createXMLStreamWriter(buffer);
 
@@ -56,10 +55,5 @@ public class XmlFileCreator {
                 new StreamSource(new ByteArrayInputStream(buffer.toByteArray())),
                 new StreamResult(new FileOutputStream(fileName)
         ));
-
-        /*transformer.transform(new StreamSource(
-                        new BufferedInputStream(new FileInputStream(tmpFileName))),
-                new StreamResult(new FileOutputStream(filename))
-        );*/
     }
 }
