@@ -12,7 +12,6 @@ import ru.k0r0tk0ff.xml.processor.service.parser.XmlParserException;
  */
 
 public class Main {
-
     public static void main(String[] args) {
         InputParametersChecker.ParametersCheck(args[0], args[1]);
         Process process = new Process();
@@ -26,7 +25,6 @@ public class Main {
             LOGGER.error("Parse XML file error!");
         }
         LOGGER.warn("Work complete.");
-
         ConnectionHolder.getInstance().closeConnection();
     }
 }
