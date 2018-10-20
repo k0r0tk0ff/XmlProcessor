@@ -1,15 +1,29 @@
+     Перед запуском проекта необходимо собрать артефакт с помощью
+сборщика maven (необходима версия не ниже 3.1) командой "mvn package".
+В созданную папку "target", где лежит собранный артефакт
+"XmlProcessor-2.5-jar-with-dependencies.jar" необходимо скопировать
+файл с настройками приложения "app.properties", и по желанию скрипт запуска
+приложения "run.bat".
 
+    Запускать приложение можно как скриптом запуска -
+run.bat [options] <fileName>
 
-java -jar project.jar [options] <fileName>
+    так и непосредственно с командной строки -
+java -jar XmlProcessor-2.5-jar-with-dependencies.jar [options] <fileName>
+
+    ВАЖНО!
+    Условием успешного запуска приложения путем запуска скрипта "run.bat"  является наличие
+в системно переменной PATH пути до java.exe. В случае его отсутствия,
+в скрипте запуска необходимо прописать полный путь до java.exe.
+
    options:
-        -L (loadSqlFile) - загрузить данные в БД из файла.
-                        Если в БД имеются данные, то они будут стерты.
-
         -S (sync) - синхронизировать данные в БД с данными из xml файла.
 
         -G (getXmlFile) - выгрузить данные из БД в xml файл.
 
+        -C (ClearData) - очистить данные в таблице (второй параметр игнорируется)
+
 Примеры:
-run.bat -L initialData.sql
-run.bat -S dataCollection.xml
-run.bat -G dataFromDb.xml
+run.bat -S dataCollection.xml     - синхронизировать данные в бд с данными из файла
+run.bat -G dataFromDb.xml         - выгрузить данные из бд в файл dataFromDb.xml
+run.bat -C                        - очистить данные в бд
