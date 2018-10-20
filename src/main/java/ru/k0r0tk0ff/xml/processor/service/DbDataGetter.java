@@ -13,12 +13,12 @@ import java.util.Set;
 /**
  * Created by korotkov_a_a on 18.10.2018.
  */
-public class DataCreatorForXmlFile {
-    private final static Logger LOGGER = LoggerFactory.getLogger(DataCreatorForXmlFile.class);
+public class DbDataGetter {
+    private final static Logger LOGGER = LoggerFactory.getLogger(DbDataGetter.class);
 
     private DbDao dbDao;
 
-    public DataCreatorForXmlFile(DbDao dbDao) {
+    public DbDataGetter(DbDao dbDao) {
         this.dbDao = dbDao;
     }
 
