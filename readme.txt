@@ -30,11 +30,11 @@ java -jar XmlProcessor-2.5-jar-with-dependencies.jar [options] <fileName>
 вместо "java" необходимо прописать полный путь до java.exe.
 
    options:
-        -S (sync) - синхронизировать данные в БД с данными из xml файла.
+        -S (synchronize) - синхронизировать данные в БД с данными из xml файла.
 
-        -G (getXmlFile) - выгрузить данные из БД в xml файл.
+        -G (get xml file) - выгрузить данные из БД в xml файл.
 
-        -C (ClearData) - очистить данные в таблице (второй параметр игнорируется)
+        -C (clear data) - очистить данные в таблице (второй параметр игнорируется)
 
 Примеры:
 run.bat -S dataCollection.xml     - синхронизировать данные в бд с данными из файла
