@@ -9,23 +9,28 @@ src
                 xml
                      processor
                          Main.java
+                         Process.java
+                         dao
+                            DbDao
 						 domain
-						     Entry.java
+						    RawEntry.java
 						 service
-						     EntryValidator.java
-						     XmlParser.java
-							   XmlCreator.java
-						 infrastructure	 
-						    	io
-							       utils
-								        XmlFileReader.java
-								        XmlFileWriter.java
-					   	  	store
-							       db
-								        DbProcessor.java	 
-                                	ConnectionHolder.java
-					 
+						    Parser
+						        XmlParser.java
+						        XmlParserException.java
+						    DbDataGetter.java
+						    Synchronizer.java
+							XmlFileCreator.java
+						 infrastructure
+						    AppPropertiesHolder.java
+							io
+							    utils
+								    InputParameterChecker.java
+								    XmlFileWriter.java
+							store
+							    db
+                                	                            ConnectionHolder.java
     	resources
-            app.properties		
-			
-			
+           log4j2.xml
+app.properties
+
