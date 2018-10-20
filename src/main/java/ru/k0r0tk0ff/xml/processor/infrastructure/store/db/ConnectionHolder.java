@@ -2,7 +2,7 @@ package ru.k0r0tk0ff.xml.processor.infrastructure.store.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.k0r0tk0ff.xml.processor.infrastructure.io.utils.AppPropertiesHolder;
+import ru.k0r0tk0ff.xml.processor.infrastructure.AppPropertiesHolder;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
