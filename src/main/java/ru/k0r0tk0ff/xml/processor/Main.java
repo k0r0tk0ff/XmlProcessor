@@ -13,14 +13,14 @@ import ru.k0r0tk0ff.xml.processor.service.parser.XmlParserException;
 
 public class Main {
     public static void main(String[] args) {
-        InputParametersChecker.ParametersCheck(args[0], args[1]);
+        InputParametersChecker.ParametersCheck(args);
         Process process = new Process();
         process.initializeLoggerSystem();
         Logger LOGGER = LoggerFactory.getLogger(Main.class);
         process.setDbDao(new DbDao());
         process.createDbTableIfNotExist();
         try {
-            process.runMainRoute(args[0], args[1]);
+            process.runMainRoute(args);
         } catch (XmlParserException e) {
             LOGGER.error("Parse XML file error!");
         }
