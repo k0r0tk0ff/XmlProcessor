@@ -32,7 +32,7 @@ java -jar XmlProcessor-2.5-jar-with-dependencies.jar [options] <fileName>
    options:
         -s (synchronize) - синхронизировать данные в БД с данными из xml файла.
 
-        -u (upload xml file) - выгрузить данные из БД в xml файл.
+        -u (upload data from database to xml file) - выгрузить данные из БД в xml файл.
 
         -c (clear data) - очистить данные в таблице (второй параметр игнорируется)
 
