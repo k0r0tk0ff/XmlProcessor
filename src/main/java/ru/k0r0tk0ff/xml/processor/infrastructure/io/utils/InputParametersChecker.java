@@ -1,8 +1,7 @@
-package ru.k0r0tk0ff.xml.processor.infrastructure.io.utils;
+package ru.k0r0tk0ff.xml.processor.utils.input;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,22 +9,28 @@ import java.util.regex.Pattern;
 /**
  * Created by korotkov_a_a on 19.10.2018.
  */
+
 public class InputParametersChecker {
 
-    private final static String[] validInputParamForFirstParam = new String[] {"-S","-G", "-C"};
+    private final static String[] validInputParamForFirstParam = new String[] {"-s","-u", "-c"};
 
-    public static void ParametersCheck(String[] args){
+    public static void parametersCheck(String[] args) throws ParametersCheckException {
 
         if(!isParameterCorrect(args[0])) {
-            System.out.println("First parameter incorrect! See readme.txt");
-            System.exit(1);
+            throw new ParametersCheckException("First parameter incorrect! See readme.txt");
         }
 
         if (args.length == 2) {
-            if (!args[0].equals("-C")) {
-                if (!isFilenameCorrect(args[1])) {
-                    System.out.println("Second parameter incorrect! Use digital, alphabetical symbols and point for file name.");
-                    System.exit(1);
+            if (!args[0].equals("-c")) {
+                if (args[0].equals("-u")) {
+                    if (!isFileNameCorrect(args[1])) {
+                        throw new ParametersCheckException("Incorrect file name for upload file.");
+                    }
+                }
+                if (args[0].equals("-s")) {
+                    if (!Files.isRegularFile(Paths.get(args[1]))) {
+                        throw new ParametersCheckException("Incorrect file name or file not exist!");
+                    }
                 }
             }
         }
@@ -36,10 +41,9 @@ public class InputParametersChecker {
                 .anyMatch(x -> x.equals(parameter));
     }
 
-    private static boolean isFilenameCorrect(String fileName) {
+    private static boolean isFileNameCorrect(String fileName) {
         Pattern pattern = Pattern.compile("[^\\*\\|\\\\\\:\\\"<>\\?\\/]");
         Matcher matcher = pattern.matcher(fileName);
-        //return !matcher.find();
         return matcher.find();
     }
 }
