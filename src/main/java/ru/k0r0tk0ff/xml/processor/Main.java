@@ -1,30 +1,37 @@
 package ru.k0r0tk0ff.xml.processor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.k0r0tk0ff.xml.processor.dao.DbDao;
-import ru.k0r0tk0ff.xml.processor.infrastructure.io.utils.InputParametersChecker;
-import ru.k0r0tk0ff.xml.processor.infrastructure.store.db.ConnectionHolder;
-import ru.k0r0tk0ff.xml.processor.service.parser.XmlParserException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import ru.k0r0tk0ff.xml.processor.dao.H2DbDao;
+import ru.k0r0tk0ff.xml.processor.infrastructure.AppPropertiesHolder;
+
+import java.io.IOException;
 
 /**
  * Created by korotkov_a_a on 18.10.2018.
  */
 
 public class Main {
-    public static void main(String[] args) {
-        InputParametersChecker.ParametersCheck(args);
-        Process process = new Process();
-        process.initializeLoggerSystem();
-        Logger LOGGER = LoggerFactory.getLogger(Main.class);
-        process.setDbDao(new DbDao());
-        process.createDbTableIfNotExist();
+
+    static {
         try {
-            process.runMainRoute(args);
-        } catch (XmlParserException e) {
-            LOGGER.error("Parse XML file error!");
+            initializeLoggerSystem();
+        } catch (IOException e) {
+            System.out.println("Read the property file error! Check that the file exists and contains valid data.");
         }
-        LOGGER.warn("Work complete.");
-        ConnectionHolder.getInstance().closeConnection();
+    }
+    public static void main(String[] args) {
+        Process process = new Process(new H2DbDao(), args);
+        process.execute();
+    }
+
+    private static void initializeLoggerSystem() throws IOException {
+        AppPropertiesHolder appProperties = AppPropertiesHolder.getInstance();
+        appProperties.loadPropertiesFromFile();
+        appProperties.setLogFileName();
+        appProperties.setLogLevel();
+        LoggerContext ctx =
+                (LoggerContext) LogManager.getContext(false);
+        ctx.reconfigure();
     }
 }
