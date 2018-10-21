@@ -5,8 +5,8 @@
 файл с настройками приложения "app.properties", и по желанию скрипт запуска
 приложения "run.bat".
 
-    Перед запуском, по необходимости, можно указать уровень логирования 
-в файле настроек приложения "app.properties". 
+    Перед запуском, по необходимости, можно указать уровень логирования
+в файле настроек приложения "app.properties".
     Допустимые значения:
 TRACE
 DEBUG
@@ -16,7 +16,7 @@ ERROR
 FATAL
 OFF
 По умолчанию выставлен уровень "INFO".
-(См. https://logging.apache.org/log4j/2.0/manual/architecture.html)    
+(См. https://logging.apache.org/log4j/2.0/manual/architecture.html)
 
     Запускать приложение можно как скриптом запуска -
 run.bat [options] <fileName>
@@ -30,15 +30,14 @@ java -jar XmlProcessor-2.5-jar-with-dependencies.jar [options] <fileName>
 вместо "java" необходимо прописать полный путь до java.exe.
 
    options:
-        -S (synchronize) - синхронизировать данные в БД с данными из xml файла.
+        -s (synchronize) - синхронизировать данные в БД с данными из xml файла.
 
-        -G (get xml file) - выгрузить данные из БД в xml файл.
+        -u (upload xml file) - выгрузить данные из БД в xml файл.
 
-        -C (clear data) - очистить данные в таблице (второй параметр игнорируется)
+        -c (clear data) - очистить данные в таблице (второй параметр игнорируется)
 
 Примеры:
-run.bat -S dataCollection.xml     - синхронизировать данные в бд с данными из файла
-run.bat -G dataFromDb.xml         - выгрузить данные из бд в файл dataFromDb.xml
-run.bat -C                        - очистить данные в бд
-
+run.bat -s dataCollection.xml     - синхронизировать данные в бд с данными из файла
+run.bat -u dataFromDb.xml         - выгрузить данные из бд в файл dataFromDb.xml
+run.bat -c                        - очистить данные в бд
 
