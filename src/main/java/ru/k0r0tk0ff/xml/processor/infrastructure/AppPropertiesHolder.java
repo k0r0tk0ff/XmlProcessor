@@ -13,7 +13,10 @@ import java.util.Properties;
  */
 
 public class AppPropertiesHolder {
-    public final static String PROPERTIES_FILE_NAME = "app.properties";
+    private final static String PROPERTIES_FILE_NAME = "app.properties";
+    private final static String LOG_FILE_NAME_KEY = "xml.processor.log.filename";
+    private final static String LOG_LEVEL_KEY = "xml.processor.log.level";
+
 
     private static AppPropertiesHolder instance;
     private static Properties properties;
@@ -36,15 +39,19 @@ public class AppPropertiesHolder {
         input.close();
     }
 
-    public String getLogFilename(String logFileNamePropertyKey) {
-        return properties.getProperty(logFileNamePropertyKey);
-    }
-
     public Properties getProperties(){
         return properties;
     }
 
-    public String getLogLevel(String logLevelKey) {
-        return properties.getProperty(logLevelKey);
+    public void setLogLevel() {
+        System.setProperty(
+                LOG_LEVEL_KEY,
+                properties.getProperty(LOG_LEVEL_KEY));
+    }
+
+    public void setLogFileName() {
+        System.setProperty(
+                LOG_FILE_NAME_KEY,
+                properties.getProperty(LOG_FILE_NAME_KEY));
     }
 }
