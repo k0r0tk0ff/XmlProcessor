@@ -2,7 +2,7 @@ package ru.k0r0tk0ff.xml.processor.infrastructure.store.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.k0r0tk0ff.xml.processor.infrastructure.AppPropertiesHolder;
+import ru.k0r0tk0ff.xml.processor.properties.AppPropertiesHolder;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -47,19 +47,5 @@ public class ConnectionHolder {
 
     public Connection getConnection() {
         return connection;
-    }
-
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Close connection success");
-                }
-            } catch (SQLException e) {
-                LOGGER.error("Error close connection!", e);
-            }
-
-        }
     }
 }
