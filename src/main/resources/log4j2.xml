@@ -20,7 +20,7 @@
     </Appenders>
     <Loggers>
             <Root level="${sys:xml.processor.log.level}">
-            <AppenderRef ref="Console" level="warn"/>
+            <AppenderRef ref="Console" level="info"/>
             <AppenderRef ref="RollingFile" level="debug"/>
         </Root>
     </Loggers>
