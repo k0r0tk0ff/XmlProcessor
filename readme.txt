@@ -15,7 +15,7 @@ WARN
 ERROR
 FATAL
 OFF
-По умолчанию выставлен уровень "INFO".
+По умолчанию выставлен уровень "DEBUG".
 (См. https://logging.apache.org/log4j/2.0/manual/architecture.html)
 
     Запускать приложение можно как скриптом запуска -
