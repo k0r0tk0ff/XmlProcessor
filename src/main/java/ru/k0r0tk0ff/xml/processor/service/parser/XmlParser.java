@@ -26,7 +26,7 @@ public class XmlParser {
 
     public Set<RawEntry> getDataFromXmlFile(String fileName) throws XmlParserException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        Document document = null;
+        Document document;
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             document = builder.parse(new File(fileName));
@@ -38,9 +38,7 @@ public class XmlParser {
             throw new XmlParserException("Read xml file error!",e);
         }
 
-        if (document.getDocumentElement() != null) {
-            document.getDocumentElement().normalize();
-        }
+        document.getDocumentElement().normalize();
 
         NodeList nodeList = document.getElementsByTagName("entry");
         if (LOGGER.isDebugEnabled()) {
@@ -55,7 +53,9 @@ public class XmlParser {
             Node node = nodeList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 RawEntry entry = convertNodeToEntry(node);
-                EntryChecker.checkExistEntryInSet(dataFromXmlFile, entry);
+                if (dataFromXmlFile.contains(entry)) {
+                    throw new XmlParserException("Find duplicate in XML file. duplicate depcode: " + entry.getDepCode() + " duplicate depjob: " + entry.getDepJob());
+                }
                 dataFromXmlFile.add(entry);
             }
         }
@@ -69,10 +69,7 @@ public class XmlParser {
         entry.setDepJob(eElement.getAttribute("depjob"));
         entry.setDescription(eElement.getAttribute("description"));
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("");
-            LOGGER.debug("depcode : " + entry.getDepCode());
-            LOGGER.debug("depjob : " + entry.getDepJob());
-            LOGGER.debug("description : " + entry.getDescription());
+            LOGGER.debug("depcode: " + entry.getDepCode() + " depjob: " + entry.getDepJob() + " description: " + entry.getDescription());
         }
         return entry;
     }
