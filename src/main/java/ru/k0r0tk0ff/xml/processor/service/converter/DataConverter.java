@@ -1,9 +1,9 @@
-package ru.k0r0tk0ff.xml.processor.service;
+package ru.k0r0tk0ff.xml.processor.service.converter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.k0r0tk0ff.xml.processor.dao.DaoException;
-import ru.k0r0tk0ff.xml.processor.dao.H2DbDao;
+import ru.k0r0tk0ff.xml.processor.dao.DbDao;
 import ru.k0r0tk0ff.xml.processor.domain.RawEntry;
 
 import javax.sql.rowset.CachedRowSet;
@@ -17,16 +17,15 @@ import java.util.Set;
 public class DataConverter {
     private final static Logger LOGGER = LoggerFactory.getLogger(DataConverter.class);
 
-    private H2DbDao h2DbDao;
+    private DbDao dbDao;
 
-    public DataConverter(H2DbDao h2DbDao) {
-        this.h2DbDao = h2DbDao;
+    public DataConverter(DbDao dbDao) {
+        this.dbDao = dbDao;
     }
 
-    public Set<RawEntry> convertDbDataToRawEntries() throws DaoException {
-        CachedRowSet cachedRowSet = h2DbDao.getRawDataFromDb();
+    public Set<RawEntry> convertDbDataToRawEntries() throws DaoException, DataConverterException {
+        CachedRowSet cachedRowSet = dbDao.getRawDataFromDb();
         Set<RawEntry> entries = new HashSet<>();
-
         try {
             while (cachedRowSet.next()) {
                 RawEntry rawEntry = new RawEntry();
@@ -37,7 +36,7 @@ public class DataConverter {
             }
             cachedRowSet.close();
         } catch (SQLException e) {
-            LOGGER.error("Cannot create raw data from DB!");
+            throw new DataConverterException("Cannot create raw data from DB!");
         }
         return entries;
     }
