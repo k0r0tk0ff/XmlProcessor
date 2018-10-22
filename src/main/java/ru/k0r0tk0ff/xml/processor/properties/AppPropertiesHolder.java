@@ -1,4 +1,4 @@
-package ru.k0r0tk0ff.xml.processor.infrastructure;
+package ru.k0r0tk0ff.xml.processor.properties;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,15 +43,37 @@ public class AppPropertiesHolder {
         return properties;
     }
 
-    public void setLogLevel() {
+    public void setLogLevel() throws AppPropertiesException {
+        checkPropertyValueExist(LOG_LEVEL_KEY);
         System.setProperty(
                 LOG_LEVEL_KEY,
                 properties.getProperty(LOG_LEVEL_KEY));
     }
 
-    public void setLogFileName() {
+    public void setLogFileName() throws AppPropertiesException {
+        checkPropertyValueExist(LOG_FILE_NAME_KEY);
         System.setProperty(
                 LOG_FILE_NAME_KEY,
                 properties.getProperty(LOG_FILE_NAME_KEY));
+    }
+
+    public void checkDataBaseProperties() throws AppPropertiesException {
+        checkPropertyValueExist("jdbc.url");
+        checkPropertyValueExist("jdbc.user");
+        checkPropertyValueExist("jdbc.password");
+    }
+
+    private void checkPropertyValueExist(String propertyKey) throws AppPropertiesException {
+        String exceptionMessage = "Property \"" + propertyKey + "\" does not correrct. Check exist valid value in app.properties file";
+        try {
+            String checkedValue = properties.getProperty(propertyKey);
+            if (!propertyKey.equals("jdbc.password")) {
+                if (checkedValue.equals("")) {
+                    throw new AppPropertiesException(exceptionMessage);
+                }
+            }
+        } catch (NullPointerException e) {
+            throw new AppPropertiesException(exceptionMessage);
+        }
     }
 }
