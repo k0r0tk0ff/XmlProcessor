@@ -76,7 +76,7 @@ public class Synchronizer {
 
     private Set<RawEntry> getEntriesForInsertToDb(Set<RawEntry> entriesFromFile, Set<RawEntry> entriesFromDb) {
         Set<RawEntry> entriesForInsertToDb;
-        entriesForInsertToDb = findUniqueEntriesFromSetXinAnotherSetY(entriesFromFile, entriesFromDb);
+        entriesForInsertToDb = findUniqueEntries(entriesFromFile, entriesFromDb);
         if (LOGGER.isDebugEnabled()) {
             showEntriesInDebugMode(entriesForInsertToDb, "insert");
         }
@@ -85,7 +85,7 @@ public class Synchronizer {
 
     private Set<RawEntry> getEntriesForDeleteInDb(Set<RawEntry> entriesFromFile, Set<RawEntry> entriesFromDb) {
         Set<RawEntry> entriesForDeleteInDb;
-        entriesForDeleteInDb = findUniqueEntriesFromSetXinAnotherSetY(entriesFromDb, entriesFromFile);
+        entriesForDeleteInDb = findUniqueEntries(entriesFromDb, entriesFromFile);
         if (LOGGER.isDebugEnabled()) {
             showEntriesInDebugMode(entriesForDeleteInDb, "delete");
         }
@@ -100,11 +100,11 @@ public class Synchronizer {
         }
     }
 
-    private Set<RawEntry> findUniqueEntriesFromSetXinAnotherSetY(Set<RawEntry> setX, Set<RawEntry> setY){
+    private Set<RawEntry> findUniqueEntries(Set<RawEntry> sourceSet, Set<RawEntry> destinationSet){
         Set<RawEntry> result;
-        result = setX
+        result = sourceSet
                 .stream()
-                .filter(x -> !setY.contains(x))
+                .filter(x -> !destinationSet.contains(x))
                 .collect(Collectors.toSet());
         return result;
     }
