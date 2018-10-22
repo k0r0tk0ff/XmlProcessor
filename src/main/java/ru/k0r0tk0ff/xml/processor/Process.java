@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import ru.k0r0tk0ff.xml.processor.dao.DaoException;
 import ru.k0r0tk0ff.xml.processor.dao.H2DbDao;
 import ru.k0r0tk0ff.xml.processor.domain.RawEntry;
+import ru.k0r0tk0ff.xml.processor.service.converter.DataConverterException;
 import ru.k0r0tk0ff.xml.processor.utils.input.InputParametersChecker;
 import ru.k0r0tk0ff.xml.processor.utils.input.ParametersCheckException;
 import ru.k0r0tk0ff.xml.processor.infrastructure.store.db.ConnectionHolder;
-import ru.k0r0tk0ff.xml.processor.service.DataConverter;
+import ru.k0r0tk0ff.xml.processor.service.converter.DataConverter;
 import ru.k0r0tk0ff.xml.processor.service.Synchronizer;
 import ru.k0r0tk0ff.xml.processor.service.XmlFileCreator;
 import ru.k0r0tk0ff.xml.processor.service.parser.XmlParserException;
@@ -63,6 +64,8 @@ public class Process {
                 }
             } catch (SQLException e) {
                 throw new DaoException("Cannot close connection!",e);
+            } catch (DataConverterException e) {
+                e.printStackTrace();
             }
             System.out.println("Work complete.");
         }  catch (XmlParserException e) {
@@ -85,7 +88,7 @@ public class Process {
     }
 
     private void synchronize(String fileName)
-            throws XmlParserException, DaoException {
+            throws XmlParserException, DaoException, DataConverterException {
         Synchronizer synchronizer = new Synchronizer(h2DbDao, fileName);
         synchronizer.synchronize();
     }
@@ -99,7 +102,8 @@ public class Process {
             FileNotFoundException,
             XMLStreamException,
             TransformerException,
-            DaoException {
+            DaoException,
+            DataConverterException {
         DataConverter dataConverter = new DataConverter(h2DbDao);
         Set<RawEntry> entries = dataConverter.convertDbDataToRawEntries();
 
