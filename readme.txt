@@ -37,7 +37,7 @@ java -jar XmlProcessor-2.5-jar-with-dependencies.jar [options] <fileName>
         -c (clear data) - очистить данные в таблице (второй параметр игнорируется)
 
 Примеры:
-run.bat -s dataCollection.xml     - синхронизировать данные в бд с данными из файла
+run.bat -s dataCollection.xml     - синхронизировать данные в бд с данными из файла dataCollection.xml
 run.bat -u dataFromDb.xml         - выгрузить данные из бд в файл dataFromDb.xml
 run.bat -c                        - очистить данные в бд
 
