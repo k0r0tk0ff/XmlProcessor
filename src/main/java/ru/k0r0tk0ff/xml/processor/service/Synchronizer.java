@@ -3,8 +3,11 @@ package ru.k0r0tk0ff.xml.processor.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.k0r0tk0ff.xml.processor.dao.DaoException;
+import ru.k0r0tk0ff.xml.processor.dao.DbDao;
 import ru.k0r0tk0ff.xml.processor.dao.H2DbDao;
 import ru.k0r0tk0ff.xml.processor.domain.RawEntry;
+import ru.k0r0tk0ff.xml.processor.service.converter.DataConverter;
+import ru.k0r0tk0ff.xml.processor.service.converter.DataConverterException;
 import ru.k0r0tk0ff.xml.processor.service.parser.XmlParser;
 import ru.k0r0tk0ff.xml.processor.service.parser.XmlParserException;
 
@@ -21,44 +24,44 @@ public class Synchronizer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Synchronizer.class);
 
     private final String fileName;
-    private final H2DbDao h2DbDao;
+    private final DbDao dbDao;
 
-    public Synchronizer(H2DbDao h2DbDao, String fileName) {
+    public Synchronizer(DbDao dbDao, String fileName) {
         this.fileName = fileName;
-        this.h2DbDao = h2DbDao;
+        this.dbDao = dbDao;
     }
 
     private Set<RawEntry> entriesFromFile;
     private Set<RawEntry> entriesFromDb;
 
 
-    public void synchronize() throws XmlParserException, DaoException {
+    public void synchronize() throws XmlParserException, DaoException, DataConverterException {
         initializeDataSets();
         synchronizeData(entriesFromFile, entriesFromDb);
         LOGGER.info("Synchronize with file success.");
     }
 
-    private void initializeDataSets() throws XmlParserException, DaoException {
+    private void initializeDataSets() throws XmlParserException, DaoException, DataConverterException {
         XmlParser xmlParser = new XmlParser();
         entriesFromFile = xmlParser.getDataFromXmlFile(fileName);
-        DataConverter dataConverter = new DataConverter(h2DbDao);
+        DataConverter dataConverter = new DataConverter(dbDao);
         entriesFromDb = dataConverter.convertDbDataToRawEntries();
     }
 
     private void synchronizeData(Set<RawEntry> entriesFromFile, Set<RawEntry> entriesFromDb) throws DaoException {
         Set<RawEntry> entriesForDeleteInDb = getEntriesForDeleteInDb(entriesFromFile, entriesFromDb);
         if(!entriesForDeleteInDb.isEmpty()) {
-            h2DbDao.deleteMissingEntriesInDb(entriesForDeleteInDb);
+            dbDao.deleteMissingEntriesInDb(entriesForDeleteInDb);
         }
 
         Set<RawEntry> entriesForInsertToDb = getEntriesForInsertToDb(entriesFromFile, entriesFromDb);
         if(!entriesForInsertToDb.isEmpty()) {
-            h2DbDao.insertEntriesToDb(entriesForInsertToDb);
+            dbDao.insertEntriesToDb(entriesForInsertToDb);
         }
 
         Set<RawEntry> entriesForUpdateInDb = getEntriesForUpdateInDb(entriesFromFile, entriesFromDb);
         if(!entriesForUpdateInDb.isEmpty()) {
-            h2DbDao.updateEntriesInDb(entriesForUpdateInDb);
+            dbDao.updateEntriesInDb(entriesForUpdateInDb);
         }
     }
 
