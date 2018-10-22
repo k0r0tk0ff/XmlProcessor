@@ -1,4 +1,4 @@
-insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Cru','Checking','Check departament');
-insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Seq','Sequrity','Guard departament');
-insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Prod','Prodaction','Maining departament');
-insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Fin','Finance','Finanse departament');
+insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Cru','Checking','Check department');
+insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Sec','Security','Guard department');
+insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Prod','Production','Maining department');
+insert into DATA (DEPCODE, DEPJOB, DESCRIPTION) values ('Fin','Finance','Finance department');
